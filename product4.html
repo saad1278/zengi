@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product 4</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="person-card">
+        <img src="product4.jpg" alt="" style="width: 300px; height: 300px;">
+        <h2 id="person-title">Person 4</h2>
+        <button id="translate-btn" onclick="translatePage()">Arabic</button>
+        <ul class="person-details">
+            <li><strong id="height-label">Height:</strong> <span id="height-value">170 cm</span></li>
+            <li><strong id="weight-label">Weight:</strong> <span id="weight-value">65 kg</span></li>
+            <li><strong id="positive-traits">Positive Traits:</strong></li>
+            <ul>
+                <li id="trait1">Active and loves to exercise regularly</li>
+                <li id="trait2">Organized and punctual</li>
+                <li id="trait3">High ability to focus and work under pressure</li>
+            </ul>
+            <li><strong id="negative-traits">Negative Traits:</strong></li>
+            <ul>
+                <li id="neg-trait1">May be hasty in making decisions</li>
+                <li id="neg-trait2">Tends to worry in uncertain situations</li>
+            </ul>
+        </ul>
+    </div>
+        <h3>Price: $11</h3>
+        </div>
+    </section>
+
+    <footer>
+        <p>>Made by Saad</p>
+        <a href="index.html" style="color: rgb(253, 253, 253);">HOME</a>
+    </footer>
+
+    <script>
+        let isEnglish = true; // متغير لتحديد اللغة الحالية
+
+function translatePage() {
+    isEnglish = !isEnglish; // تغيير اللغة
+
+    // ترجمة النصوص
+    document.getElementById('person-title').textContent = isEnglish ? 'Person 1' : 'الشخص 1';
+    document.getElementById('translate-btn').textContent = isEnglish ? 'Arabic' : 'English';
+    
+    // صفات إيجابية
+    document.getElementById('positive-traits').textContent = isEnglish ? 'Positive Traits:' : 'الصفات الإيجابية:';
+    document.getElementById('trait1').textContent = isEnglish ? 'Active and loves to exercise regularly' : 'نشيط ويحب ممارسة الرياضة بانتظام';
+    document.getElementById('trait2').textContent = isEnglish ? 'Organized and punctual' : 'منظم وملتزم بالمواعيد';
+    document.getElementById('trait3').textContent = isEnglish ? 'High ability to focus and work under pressure' : 'قدرة عالية على التركيز والعمل تحت الضغط';
+    
+    // صفات سلبية
+    document.getElementById('negative-traits').textContent = isEnglish ? 'Negative Traits:' : 'الصفات السلبية:';
+    document.getElementById('neg-trait1').textContent = isEnglish ? 'May be hasty in making decisions' : 'قد يكون متسرعًا في اتخاذ القرارات';
+    document.getElementById('neg-trait2').textContent = isEnglish ? 'Tends to worry in uncertain situations' : 'يميل إلى القلق في المواقف الغامضة';
+
+    // قيم الطول والوزن
+    document.getElementById('height-label').textContent = isEnglish ? 'Height:' : 'الطول:';
+    document.getElementById('height-value').textContent = isEnglish ? '170 cm' : '170 سم';
+    document.getElementById('weight-label').textContent = isEnglish ? 'Weight:' : 'الوزن:';
+    document.getElementById('weight-value').textContent = isEnglish ? '65 kg' : '65 كجم';
+}
+
+    </script>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.person-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+h2 {
+    text-align: center;
+    color: #3b5998;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.person-details {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+.person-details li {
+    padding: 10px 0;
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.person-details li:hover {
+    background-color: #e8f0fe; /* لون خلفية عند التمرير */
+    transform: scale(1.02); /* تكبير بسيط */
+}
+
+.person-details ul {
+    margin-top: 5px;
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.person-details ul li {
+    padding: 5px 0;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.person-details ul li:hover {
+    background-color: #f0f0f0; /* لون خلفية عند التمرير */
+    transform: scale(1.02); /* تكبير بسيط */
+}
+
+strong {
+    color: #3b5998;
+}
+#translate-btn {
+    background-color: #3b5998;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+#translate-btn:hover {
+    background-color: #2e448a; /* لون الخلفية عند التمرير */
+}
+
+
+    </style>
+</body>
+</html>
