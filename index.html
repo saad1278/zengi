@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zengi Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="bg-primary text-white text-center py-4 rounded mb-4">
+        <h1 id="site-title">Zengi Store</h1>
+        <button id="translate-btn" class="btn btn-warning" onclick="translatePage()">Arabic</button>
+    </header>
+
+    <section class="container">
+        <button id="add-product-btn" class="btn btn-success btn-lg mb-4">+ Add Product</button>
+        <div id="product-form" class="card p-4 mb-4" style="display: none;">
+            <form onsubmit="saveProduct(event)">
+                <input type="file" id="product-image" class="form-control mb-3" accept="image/*" required>
+                <input type="text" id="product-name" class="form-control mb-3" placeholder="Product Name" required>
+                <textarea id="product-desc" class="form-control mb-3" placeholder="Product Description" required></textarea>
+                <input type="number" id="product-price" class="form-control mb-3" placeholder="Price" required>
+                <input type="text" id="product-seller" class="form-control mb-3" placeholder="Seller Name" required>
+                <input type="tel" id="product-phone" class="form-control mb-3" placeholder="Seller Phone" required>
+                <button type="submit" class="btn btn-primary">Save Product</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="row" id="products-container">
+            <!-- المنتجات المضافة ستظهر هنا -->
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-3 mt-4 rounded">
+        <p>Made by Saad</p>
+    </footer>
+
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNvwWujMfZIBB6bSzlAG3frmhAlnIMDII",
+            authDomain: "zengi-26233.firebaseapp.com",
+            projectId: "zengi-26233",
+            storageBucket: "zengi-26233.firebasestorage.app",
+            messagingSenderId: "684151919546",
+            appId: "1:684151919546:web:6d62a908f7103cee2b0383",
+            measurementId: "G-5G90Y9GEZT"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // عرض النموذج عند النقر على زر "Add Product"
+        document.getElementById("add-product-btn").addEventListener("click", function () {
+            document.getElementById("product-form").style.display = "block";
+        });
+
+        // إغلاق النموذج
+        function closeModal() {
+            document.getElementById("product-form").style.display = "none";
+        }
+
+        // حفظ المنتج
+        function saveProduct(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+
+            const imageFile = document.getElementById("product-image").files[0];
+            const name = document.getElementById("product-name").value;
+            const desc = document.getElementById("product-desc").value;
+            const price = document.getElementById("product-price").value;
+            const seller = document.getElementById("product-seller").value;
+            const phone = document.getElementById("product-phone").value;
+
+            if (!imageFile || !name || !desc || !price || !seller || !phone) {
+                alert("All fields are required!");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const newProduct = {
+                    image: event.target.result,
+                    name,
+                    description: desc,
+                    price,
+                    seller,
+                    phone,
+                    reviews: []
+                };
+
+                // حفظ المنتج في Firebase
+                const productsRef = ref(database, 'products');
+                push(productsRef, newProduct).then(() => {
+                    alert("Product added successfully!");
+                    closeModal();
+                    displayProducts();
+                }).catch((error) => {
+                    console.error("Error adding product: ", error);
+                });
+            };
+            reader.readAsDataURL(imageFile);
+        }
+
+        // عرض المنتجات
+        function displayProducts() {
+            const productsContainer = document.getElementById("products-container");
+            const productsRef = ref(database, 'products');
+
+            onValue(productsRef, (snapshot) => {
+                const products = [];
+                snapshot.forEach((childSnapshot) => {
+                    const product = childSnapshot.val();
+                    product.id = childSnapshot.key; // إضافة ID للمنتج
+                    products.push(product);
+                });
+
+                productsContainer.innerHTML = "";
+
+                products.forEach((product) => {
+                    const productCard = document.createElement("div");
+                    productCard.className = "col-md-4 mb-4";
+                    productCard.innerHTML = `
+                        <div class="card product-card">
+                            <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${product.name}</h5>
+                                <p class="card-text">${product.description}</p>
+                                <p class="card-text"><strong>Price:</strong> $${product.price}</p>
+                                <p class="card-text"><strong>Seller:</strong> ${product.seller}</p>
+                                <p class="card-text"><strong>Phone:</strong> ${product.phone}</p>
+                            </div>
+                        </div>
+                    `;
+                    productCard.addEventListener("click", () => {
+                        localStorage.setItem("selectedProduct", product.id);
+                        window.location.href = "product.html";
+                    });
+                    productsContainer.appendChild(productCard);
+                });
+            });
+        }
+
+        // تحميل المنتجات عند فتح الصفحة
+        document.addEventListener("DOMContentLoaded", displayProducts);
+    </script>
+</body>
+</html>
